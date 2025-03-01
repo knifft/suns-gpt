@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            background-color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid rgb(49, 46, 46);
+        }
+
+        .logo {
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        .logo span:first-child {
+            color: #f9a333;
+        }
+
+        .logo span:last-child {
+            color: #412771;
+        }
+
+        /* Subheader */
+        .subheader {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Input Box */
+        .container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            width: 100%;
+        }
+
+        input::placeholder {
+            color: #aaa;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #412771;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        /* Processing Steps */
+        .processing {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .processing .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .processing img {
+            max-width: 16px;
+            max-height: 16px;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .blinking {
+            animation: blink 1s linear infinite;
+        }
+
+        .checkmark, .not-helpful {
+            display: none;
+            margin-left: 10px;
+            min-width: 80px; /* Ensures consistent spacing */
+            text-align: left;
+        }
+
+        .checkmark {
+            color: #f9a333;
+            font-weight: bold;
+        }
+
+        .not-helpful {
+            color: red;
+            font-weight: bold;
+        }
+
+        #gifContainer {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function handleSubmit() {
+            const container = document.getElementById("processingContainer");
+            container.innerHTML = "";
+            document.getElementById("gifContainer").style.display = "none";
+
+            const steps = [
+                "Processing inquiry...",
+                "Accessing basketball-reference.com ...",
+                "Scanning Ishbia's texts and emails...",
+                "Searching Gumbo tweets...",
+                "Channeling my inner Wiz..."
+            ];
+
+            let index = 0;
+
+            function showStep() {
+                if (index >= steps.length) {
+                    document.getElementById("gifContainer").style.display = "block";
+                    return;
+                }
+                
+                const stepDiv = document.createElement("div");
+                stepDiv.className = "step blinking";
+                stepDiv.innerHTML = `<img src='<img alt="Suns" class="Image Logo Logo__xxl" data-mptype="image" src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/phx.png">' alt='Bullet'> ${steps[index]}`;
+                container.appendChild(stepDiv);
+
+                setTimeout(() => {
+                    stepDiv.classList.remove("blinking");
+                    stepDiv.style.opacity = 1;
+                    const statusSpan = document.createElement("span");
+                    statusSpan.className = index === 3 ? "not-helpful" : "checkmark";
+                    statusSpan.innerText = index === 3 ? "Not Helpful" : "✔";
+                    stepDiv.appendChild(statusSpan);
+                    statusSpan.style.display = "inline-block";
+                    index++;
+                    setTimeout(showStep, 500);
+                }, 5000);
+            }
+
+            showStep();
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <span>Suns</span><span>GPT</span>
+        </div>
+    </div>
+
+    <!-- Subheader -->
+    <div class="subheader">A no frills AI Engine for all your Suns questions</div>
+
+    <!-- Input Box -->
+    <div class="container">
+        <input type="text" id="userInput" placeholder="start searching...">
+        <button onclick="handleSubmit()">Submit</button>
+        <div class="processing" id="processingContainer"></div>
+        <div id="gifContainer">
+            <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTdvdDN3b2FwYjN1ZjRjZDFqcGFtMjVzZGRpd2dqeG1icTJ1OHRteiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mnojD0dPjgD7Fvz4yo/giphy.gif" alt="Processing Complete">
+        </div>
+    </div>
+
+</body>
+</html>
